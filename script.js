@@ -1,82 +1,108 @@
 const RANDOM_QUOTE_API_URL = 'https://api.quotable.io/random'
 const quoteDisplayElement = document.getElementById('quoteDisplay')
 const quoteInputElement = document.getElementById('quoteInput')
+const infoDisplayElement = document.getElementById('infoDisplay')
 var quote = ""
-var quoteChars = ""
+var quoteWords = ""
+var previousCorrectWords = ""
 var quoteLength = 0
-//quoteDisplayElement.read = true;
-quoteInputElement.setAttribute('maxlength', '10')
+var wordLength = 0
+var previousCorrectNum = 0
+var totalWordsTyped = 0
+var totalSentencesCompleted = 0
+var seconds = 0;
 
 quoteInputElement.addEventListener('input', () => {
 
-    const arrayQuote = quoteDisplayElement.querySelectorAll('span')
-    const arrayValue = quoteInputElement.value.split('')
-    let correctLetters = 0;
-    let correct = true
+    
+    let correct = []
+    let incorrect = []
+    let unTyped = quote.split('')
+
+    const Input = quoteInputElement.value.split('')
+    let correctNum = 0;
+    let complete = false
     
     
+    for (let i=0; i<Input.length; i++) {
+        const character = Input[i]
 
-    //document.remove
-    //arrayQuote[0].classList.remove
-    //quoteDisplayElement.removeChild(characterSpan)
-    
-    //arrayQuote.forEach((characterSpan, index) => {
-        //if(index==) {
-        //    characterSpan.innerText = 'a'
-        //}
-
-        //const character = arrayValue[index]
-        //if (character == null) {
-        //    characterSpan.classList.remove('correct')
-        //    characterSpan.classList.remove('incorrect')
-        //    correct = false
-        //} else if (character === characterSpan.innerText) {
-        //    characterSpan.classList.add('correct')
-        //    characterSpan.classList.remove('incorrect')
-        //} else {
-        //    characterSpan.classList.remove('correct')
-        //    characterSpan.classList.add('incorrect')
-        //    correct = false
-        //}
-    //})
-    
-    
-
-    for (let i=0; i<arrayQuote.length; i++) {
-        const character = arrayValue[i]
-        
-        //arrayQuote[0].characterSpan.innerText = 'a'
-        //arrayQuote[0].classList.innerText = 'a'
-        
-        
-
-        if (character == null) {
-            arrayQuote[i].classList.remove('correct')
-            arrayQuote[i].classList.remove('incorrect')
-            correct = false
-        }
-
-        else if (character == quote[i] && i==correctLetters) {
-            arrayQuote[i].classList.add('correct')
-            arrayQuote[i].classList.remove('incorrect')
-            //arrayQuote[i].innerText = ''
-            correctLetters++
+        if (character == quote[i] && i==correctNum) {
+            unTyped[i] = ''
+            correct[i] = quote[i]
+            correctNum++
         }
 
         else {
-            arrayQuote[i].classList.remove('correct')
-            arrayQuote[i].classList.add('incorrect')
-            correct = false
+            unTyped[i] = ''
+            incorrect[i] = quote[i]
         }
     }
-  
-    if (correct) {
-        renderNewQuote()
+
+    if (wordLength+1 <= correctNum && Input[wordLength] == ' ') {
+    
+        previousCorrectWords = previousCorrectWords + quoteWords[0] + " "
+        correct = []
+
+        previousCorrectNum += wordLength+1
+        correctNum = 0
+        
+        if (quoteInputElement.value.length == wordLength + 1)
+            quoteInputElement.value = ""
+        
+        else {
+            quoteInputElement.value = quoteInputElement.value.substring(wordLength+1, quoteInputElement.value.length)
+        }
+
+        
+
+        quoteWords.shift()
+        wordLength = quoteWords[0].length
+        quoteInputElement.setAttribute('maxlength', wordLength+6)
+        totalWordsTyped++
+
+        let info = infoDisplayElement.innerText.split("\n")
+        info[1] = "Words Typed: " + totalWordsTyped
+        infoDisplayElement.innerText = info.join("\n")
     }
 
-    console.log(correctLetters)
-})
+    else if (wordLength == correctNum && quoteWords.length==1) {
+        totalWordsTyped++
+        complete = true
 
+        let info = infoDisplayElement.innerText.split("\n")
+        info[1] = "Words Typed: " + totalWordsTyped
+        infoDisplayElement.innerText = info.join("\n")
+    }
+
+    quote = quoteWords.join(" ")
+
+    const TC = document.createElement('span')
+    TC.classList.add('correct')
+    TC.innerText = previousCorrectWords + correct.join("") 
+    
+    const TI = document.createElement('span')
+    TI.classList.add('incorrect')
+    TI.innerText = incorrect.join("")
+
+    const TU = document.createElement('span')
+    TU.classList.add('unTyped')
+    TU.innerText = unTyped.join("")
+
+    quoteDisplayElement.replaceChild(TC, quoteDisplayElement.querySelector('.correct'))
+    quoteDisplayElement.replaceChild(TI, quoteDisplayElement.querySelector('.incorrect'))
+    quoteDisplayElement.replaceChild(TU, quoteDisplayElement.querySelector('.unTyped'))
+  
+    if (complete) {
+        totalSentencesCompleted++
+
+        let info = infoDisplayElement.innerText.split("\n")
+        info[0] = "Sentences Completed: " + totalSentencesCompleted
+        infoDisplayElement.innerText = info.join("\n")
+
+        renderNewQuote()
+    }
+})
 
 function getRandomQuote() {
     return fetch(RANDOM_QUOTE_API_URL)
@@ -85,19 +111,58 @@ function getRandomQuote() {
   }
 
 async function renderNewQuote() {
-    quote = quoteChars = await getRandomQuote()
-    quoteLength = quoteChars.length
-    quoteDisplayElement.innerHTML = ''
-    quoteChars.split('').forEach(character => {
-        const characterSpan = document.createElement('span')
-        characterSpan.innerText = character
-        quoteDisplayElement.appendChild(characterSpan)
-    })
-
+    quote = await getRandomQuote()
+    quoteWords = quote.split(" ")
     
+    quoteLength = quote.length
+    wordLength = quoteWords[0].length
+    
+    quoteDisplayElement.innerHTML = ''
+    quoteInputElement.setAttribute('maxlength', wordLength+6)
+
+    const correct = document.createElement('span')
+    correct.innerText = ''
+    correct.classList.add('correct')
+
+    const incorrect = document.createElement('span')
+    incorrect.innerText = ''
+    incorrect.classList.add('incorrect')
+
+    const unTyped = document.createElement('span')
+    unTyped.innerText = quote
+    unTyped.classList.add('unTyped')
+
+    quoteDisplayElement.appendChild(correct)
+    quoteDisplayElement.appendChild(incorrect)
+    quoteDisplayElement.appendChild(unTyped)
 
     quoteInputElement.value = null
+    previousCorrectWords = ""
+    previousCorrectNum = 0
+}
+
+function stopWatch() {
+    let info = infoDisplayElement.innerText.split("\n")
+    let minString = Math.floor(seconds/60)
+    let secString = seconds%60
+
+    if (seconds/60 < 10) {
+        minString = "0" + Math.floor(seconds/60)
+    }
+        
+
+    if (seconds%60 < 10) {
+        secString = "0" + seconds%60
+    }
+        
+
+    info[2] = "Time Elapsed: " + minString + ":" + secString
+    infoDisplayElement.innerText = info.join("\n")
+    seconds++;
+        
+    setTimeout(stopWatch, 1000);
 }
 
 renderNewQuote()
+stopWatch()
 
