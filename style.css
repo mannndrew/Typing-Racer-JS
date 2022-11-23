@@ -5,6 +5,8 @@
 body {
     background-color: #2b2b2b;
     margin: 0;
+    min-width: 450px;
+    position: relative;
 }
 
 main {
@@ -12,7 +14,6 @@ main {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    margin: 0;
     background-color: #2b2b2b;
 }
 
@@ -34,10 +35,9 @@ body, .quote-input {
     border-radius: .5rem;
     width: 350px;
     max-width: 90%;
-    margin-top: 10px;
-    margin-right: 10px;
     position: absolute;
-    right: 0px;
+    right: 10px;
+    top: 10px;
 }
 
 .quote-display {
@@ -80,7 +80,7 @@ body, .quote-input {
     color: rgb(50, 200, 240);
 }
   
-  .incorrect {
+.incorrect {
     color: #BB0000;
     background-color: #BB000033;
 }

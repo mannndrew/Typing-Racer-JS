@@ -114,11 +114,7 @@ function getRandomQuote() {
 
 async function renderNewQuote() {
     quote = await getRandomQuote()
-    //quote = "awdwadwadwadw adwadwadw adwadwadwadw adwadwadwad wadwadawd" +
-    "awdwadwadwadw adwadwadw adwadwadwadw adwadwadwad wadwadawd" +
-    "awdwadwadwadw adwadwadw adwadwadwadw adwadwadwad wadwadawd" +
-    "awdwadwadwadw adwadwadw adwadwadwadw adwadwadwad wadwadawd" +
-    "awdwadwadwadw adwadwadw adwadwadwadw adwadwadwad wadwadawd" 
+   
     quoteWords = quote.split(" ")
     
     quoteLength = quote.length
