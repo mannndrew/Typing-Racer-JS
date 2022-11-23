@@ -2,6 +2,8 @@ const RANDOM_QUOTE_API_URL = 'https://api.quotable.io/random'
 const quoteDisplayElement = document.getElementById('quoteDisplay')
 const quoteInputElement = document.getElementById('quoteInput')
 const infoDisplayElement = document.getElementById('infoDisplay')
+infoDisplayElement.innerText = "Sentences Completed: 0\nWords Typed: 0\nTime Elapsed: 00:00"
+
 var quote = ""
 var quoteWords = ""
 var previousCorrectWords = ""
@@ -112,6 +114,11 @@ function getRandomQuote() {
 
 async function renderNewQuote() {
     quote = await getRandomQuote()
+    //quote = "awdwadwadwadw adwadwadw adwadwadwadw adwadwadwad wadwadawd" +
+    "awdwadwadwadw adwadwadw adwadwadwadw adwadwadwad wadwadawd" +
+    "awdwadwadwadw adwadwadw adwadwadwadw adwadwadwad wadwadawd" +
+    "awdwadwadwadw adwadwadw adwadwadwadw adwadwadwad wadwadawd" +
+    "awdwadwadwadw adwadwadw adwadwadwadw adwadwadwad wadwadawd" 
     quoteWords = quote.split(" ")
     
     quoteLength = quote.length

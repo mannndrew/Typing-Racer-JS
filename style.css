@@ -29,7 +29,6 @@ body, .quote-input {
 }
 
 .containerSide {
-    float: right;
     background-color: #414141;
     padding: 1rem;
     border-radius: .5rem;
@@ -37,6 +36,8 @@ body, .quote-input {
     max-width: 90%;
     margin-top: 10px;
     margin-right: 10px;
+    position: absolute;
+    right: 0px;
 }
 
 .quote-display {
