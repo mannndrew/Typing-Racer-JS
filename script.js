@@ -13,18 +13,14 @@ var previousCorrectNum = 0
 var totalWordsTyped = 0
 var totalSentencesCompleted = 0
 var seconds = 0;
-var checkNextWord = true;
-
 
 quoteInputElement.addEventListener('input', () => {
 
-    do
-    {
         let correct = []
         let incorrect = []
         let unTyped = quote.split('')                               //Split the un-typed portion to compare against input.
 
-        const Input = quoteInputElement.value.split('')             //Split user input to array to check against un-typed.
+        let Input = quoteInputElement.value.split('')             //Split user input to array to check against un-typed.
         let correctNum = 0;
         let complete = false
         checkNextWord = false;
@@ -44,7 +40,7 @@ quoteInputElement.addEventListener('input', () => {
             }
         }
 
-        if (wordLength+1 <= correctNum && Input[wordLength] == ' ') {   // Execute if correct word, but not last.
+        while (wordLength+1 <= correctNum && Input[wordLength] == ' ') {   // Execute if correct word, but not last.
         
             previousCorrectWords = previousCorrectWords + quoteWords[0] + " "
             
@@ -60,6 +56,7 @@ quoteInputElement.addEventListener('input', () => {
             
             else {
                 quoteInputElement.value = quoteInputElement.value.substring(wordLength+1, quoteInputElement.value.length)
+                Input = quoteInputElement.value.split('') 
                 checkNextWord = true;
             }
 
@@ -73,7 +70,7 @@ quoteInputElement.addEventListener('input', () => {
             infoDisplayElement.innerText = info.join("\n")
         }
 
-        else if (wordLength == correctNum && quoteWords.length==1) {    // Execute if last correct word.
+        if (wordLength == correctNum && quoteWords.length==1) {    // Execute if last correct word.
             totalWordsTyped++
             complete = true
 
@@ -110,8 +107,6 @@ quoteInputElement.addEventListener('input', () => {
 
             renderNewQuote()
         }
-    }
-    while(checkNextWord);
 })
 
 function getRandomQuote() {
