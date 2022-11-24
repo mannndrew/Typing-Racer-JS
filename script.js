@@ -18,14 +18,14 @@ quoteInputElement.addEventListener('input', () => {
 
         let correct = []
         let incorrect = []
-        let unTyped = quote.split('')                               //Split the un-typed portion to compare against input.
+        let unTyped = quote.split('')                               // Split the un-typed portion to compare against input.
 
-        let Input = quoteInputElement.value.split('')             //Split user input to array to check against un-typed.
+        let Input = quoteInputElement.value.split('')               // Split user input to array to check against un-typed.
         let correctNum = 0;
         let complete = false
         checkNextWord = false;
 
-        for (let i=0; i<Input.length; i++) {                        //Loop over user input, move each un-typed to either correct or incorrect arrays.
+        for (let i=0; i<Input.length; i++) {                        // Loop over user input, move each un-typed to either correct or incorrect arrays.
             const character = Input[i]
 
             if (character == quote[i] && i==correctNum) {
@@ -98,7 +98,7 @@ quoteInputElement.addEventListener('input', () => {
         quoteDisplayElement.replaceChild(TI, quoteDisplayElement.querySelector('.incorrect'))
         quoteDisplayElement.replaceChild(TU, quoteDisplayElement.querySelector('.unTyped'))
     
-        if (complete) {
+        if (complete) {                 // If last word complete, generate new sentence.
             totalSentencesCompleted++
 
             let info = infoDisplayElement.innerText.split("\n")
